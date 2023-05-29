@@ -60,7 +60,7 @@ def sumar_estadisticas(lista_jugadores: list, clave: str):
                 suma += valores
     return suma
 
-def dividir(dividendo: float, divisor: float) -> float:
+def dividir(dividendo, divisor) -> float:
     '''
     Operacion matematica dividir
     Parametro: ambos parametros pueden ser int o float
@@ -69,7 +69,7 @@ def dividir(dividendo: float, divisor: float) -> float:
 
     if divisor > 0:
         resultado = dividendo / divisor
-        return resultado
+        return float(resultado)
     elif divisor == 0: 
         return 0
 
@@ -114,6 +114,17 @@ def calcular_jugador_min_estadisticas(lista_jugadores: list, clave: str):
                 lista_aux = jugador
     return lista_aux
 
+def formatear_claves(clave: str):
+    '''
+    Formatea las palabras de las claves de estadisticas
+    Parametro: str
+    Retorna la palabra formateada
+    '''
+    if "_" in clave:
+        return clave.replace("_", " ").capitalize()
+    else:
+        return clave.capitalize()
+    
 #7, 8, 9, 13, 14, 19
 def mostrar_jugador_estadisticas_max(lista_jugadores: list, clave: str):
     '''
@@ -122,12 +133,12 @@ def mostrar_jugador_estadisticas_max(lista_jugadores: list, clave: str):
     Retorna los datos del jugador formateado
     '''
     texto_formateado = []
-    jugador = calcular_jugador_max_estadisticas(lista_jugadores, "temporadas")
+    jugador = calcular_jugador_max_estadisticas(lista_jugadores, clave)
     texto_formateado.append("Nombre: {0}\nPosicion: {1}"
                             .format(jugador["nombre"], jugador["posicion"]))
-    for clave, valor in jugador["estadisticas"].items():
+    for claves, valor in jugador["estadisticas"].items():
         texto_formateado.append("{0}: {1}".format(
-            clave.replace("_", " ").capitalize(), valor))
+                        formatear_claves(claves, valor))
     texto_formateado = "\n".join(texto_formateado)
 
     return texto_formateado
@@ -141,10 +152,11 @@ def estadisticas_mayores_a_input(lista_jugadores: list, clave: str):
     '''
     numero = input("Ingrese un número: ")
     nombres_jugadores = []
-    if validar_numero(numero.strip()) == True:
+    if validar_numero(numero) == True:
+        numero = float(numero.strip())
         for jugadores in lista_jugadores:
-            if (jugadores["estadisticas"][clave] > float(numero)
-                 and float(numero) >= 0):
+            if (jugadores["estadisticas"][clave] > numero
+                 and numero >= 0):
                 nombres_jugadores.append(
                     "Nombre: {0}".format(jugadores["nombre"]))
         if len(nombres_jugadores) > 0:
@@ -168,7 +180,7 @@ def excluir_jugador_min(lista_jugadores: list, clave: str):
     promedio = resultado_excluir_min / (len(lista_jugadores) - 1)
     texto_formateado = []
     texto_formateado.append("{0}: {1}".format(
-        clave.replace("_", " ").capitalize(),promedio))
+                    formatear_claves(clave).capitalize(),promedio))
     for jugador in lista_jugadores:
         if jugador != calcular_jugador_min_estadisticas(lista_jugadores, clave):
             texto_formateado.append("Nombre: {0}\nPromedio puntos por partido: {1}"
@@ -231,14 +243,12 @@ def imprimir_estadisticas_jugador_indice(lista_jugadores: list):
     "Ingrese un numero del 0 al 11 para mostrar la informacion del jugador: ")
     lista_formateada = []
     if (validar_numero(indice_jugador) == True and 
-            re.match(r"^(?:1[0-1]|[0-9])$", indice_jugador) and 
-            int(indice_jugador) < len(lista_jugadores)):
+            re.match(r"^(?:1[0-1]|[0-9])$", indice_jugador):
         jugador = lista_jugadores[int(indice_jugador)]
         lista_formateada.append("Nombre: {0},\nPosicion: {1}".format(
                             jugador["nombre"], jugador["posicion"]))
         for claves, valor in jugador["estadisticas"].items():
-            lista_formateada.append("{0}: {1}".format(
-                                claves.replace("_", " ").capitalize(), valor))
+            lista_formateada.append("{0}: {1}".format(formatear_claves(clave), valor))
         lista_formateada = ",\n".join(lista_formateada)
         guardar_archivo_csv("jugador_elegido.csv", lista_formateada)
     else:
