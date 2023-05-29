@@ -4,7 +4,6 @@ import csv
 import re
 
 
-
 ########################### AUXILIARES #############################
 def leer_archivo(path_completo: str):
     '''
@@ -16,7 +15,6 @@ def leer_archivo(path_completo: str):
     with open(path_completo, "r") as archivo:
         return list[dict](json.load(archivo)["jugadores"])
 
-dream_team = leer_archivo(r"C:\Users\gabri\OneDrive\Documentos\UTN\Laboratorio_I\primer_parcial\pp_lab1_barboza_matias_gabriel\dt.json")
 def validar_numero(numero: str)-> bool:
     '''
     Valida si el dato ingresado es un numero, sea int o float
