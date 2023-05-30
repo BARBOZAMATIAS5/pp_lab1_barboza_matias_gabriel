@@ -403,7 +403,8 @@ def ordenar_por_posiciones(lista_jugadores: list):
 
     return lista_ordenada
 
-print()
+#23
+
 
 ################################ FIN AUXILIARES #################################
 ############################### OPCION FUNCIONES ################################
