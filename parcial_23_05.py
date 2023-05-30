@@ -3,8 +3,8 @@ import json
 import csv
 import re
 
-
 ########################### AUXILIARES #############################
+
 def leer_archivo(path_completo: str):
     '''
     Lee el archivo .json por ruta
@@ -138,7 +138,7 @@ def calcular_jugador_min_estadisticas(lista_jugadores: list, clave: str):
                 lista_aux = jugador
     return lista_aux
 
-def lista_dict_nombres_promedios(lista_jugadores: list[dict], clave: str):
+def lista_dict_nombres(lista_jugadores: list[dict], clave: str):
     '''
     Crea una lista donde se almacenaran los nombres y la clave a eleccion.
     Parametro: list[dict] - str
@@ -211,7 +211,7 @@ def nombre_jugador_logros(lista_jugadores: list):
         return "Error, ingrese correctamente."
 
 #4
-def ordenar_claves(lista_jugadores:list, clave: str):
+def ordenar_claves_o_numeros(lista_jugadores:list, clave: str):
     '''
     Ordena las claves pasadas por parametro
     Parametros: list - str
@@ -223,28 +223,25 @@ def ordenar_claves(lista_jugadores:list, clave: str):
     while bandera_swap:
         bandera_swap = False
         longitud_lista = longitud_lista - 1
-
         for indice in range(longitud_lista):
             if copia_lista[indice][clave] > copia_lista[indice+1][clave]:
-                copia_lista[indice][clave], copia_lista[indice+1][clave] = copia_lista[indice+1][clave], copia_lista[indice][clave]
+                copia_lista[indice], copia_lista[indice+1] = copia_lista[indice+1], copia_lista[indice]
                 bandera_swap = True
     return copia_lista
 
-def formateo_nombres_ordenados_con_promedio_puntos(lista_jugadores: list):
+
+def formateo_ordenados(lista_jugadores: list, clave: str):
     '''
     Formateo de string de los nombres y sus promedios.
     Parametro: list
     No retorna nada
     '''
     copia_lista = lista_jugadores[:]
-    lista = lista_dict_nombres_promedios(copia_lista, "promedio_puntos_por_partido")
-    ordenar_claves(lista, "nombre")
+    lista = lista_dict_nombres(copia_lista, clave)
+    lista = ordenar_claves_o_numeros(lista, "nombre")
     for jugadores in lista:
         for claves, valores in jugadores.items():
             print("{0}: {1}".format(formatear_claves(claves), valores))
-
-
-
 
 #5
 def jugadores_salon_fama(lista_jugadores: list):
@@ -331,9 +328,9 @@ def excluir_jugador_min(lista_jugadores: list, clave: str):
     texto_formateado.append("{0}: {1}".format(
                     formatear_claves(clave).capitalize(),promedio))
     for jugador in copia_lista:
-        if jugador != calcular_jugador_min_estadisticas(copia_lista, clave):
-            texto_formateado.append("Nombre: {0}\nPromedio puntos por partido: {1}"
-                    .format(jugador["nombre"], jugador["estadisticas"][clave]))
+        if jugador != jugador_min:
+            texto_formateado.append("Nombre: {0}\n{1}: {2}"
+                    .format(jugador["nombre"], formatear_claves(clave), jugador["estadisticas"][clave]))
             
     texto_formateado.append("\nJugador excluido {0}".format(jugador_min["nombre"]))
     texto_formateado = "\n".join(texto_formateado)
@@ -360,6 +357,54 @@ def jugador_mayor_logros(lista_jugadores: list):
     lista_logros = "\n".join(lista_logros)
     return "Nombre: {0}\n-Logros- \n{1}".format(lista_aux["nombre"], lista_logros)
 
+#20
+def lista_modificada(lista_jugadores: list) -> list:
+    '''
+    Modifica la lista intercambiando las posiciones por numeros
+    Parametros: list
+    Retorna una lista modificada
+    '''
+    copia_lista = lista_jugadores [:]
+    for jugadores in copia_lista:
+        if jugadores["posicion"] == "Base":
+            jugadores["posicion"] = 1
+        elif jugadores["posicion"] == "Escolta":
+            jugadores["posicion"] = 2
+        elif jugadores["posicion"] == "Alero":
+            jugadores["posicion"] = 3
+        elif jugadores["posicion"] == "Ala-Pivot":
+            jugadores["posicion"] = 4
+        elif jugadores["posicion"] == "Pivot":
+            jugadores["posicion"] = 5
+        else:
+            return "No funciona"
+
+    return copia_lista
+
+def ordenar_por_posiciones(lista_jugadores: list):
+    '''
+    Ordena y cambia las posiciones de numeros a las posiciones correspondientes
+    Parametro: list
+    Retorna la lista ordenada y modificada
+    '''
+    copia_lista = lista_jugadores[:]
+    lista_ordenada = ordenar_claves_o_numeros(copia_lista, "posicion")
+    for jugadores in lista_ordenada:
+        if jugadores["posicion"] == 1:
+            jugadores["posicion"] = "Base"
+        elif jugadores["posicion"] == 2:
+            jugadores["posicion"] = "Escolta"
+        elif jugadores["posicion"] == 3:
+            jugadores["posicion"] = "Alero"
+        elif jugadores["posicion"] == 4:
+            jugadores["posicion"] = "Ala-Pivot"
+        elif jugadores["posicion"] == 5:
+            jugadores["posicion"] = "Pivot"
+
+    return lista_ordenada
+
+print()
+
 ################################ FIN AUXILIARES #################################
 ############################### OPCION FUNCIONES ################################
 #1
@@ -369,16 +414,19 @@ def imprimir_jugadores(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    formateo_dream_team_jugadores(lista_jugadores)
+    formateo_dream_team_jugadores(
+                            lista_jugadores)
         
 #2
 def imprimir_estadisticas_jugador_indice(lista_jugadores: list):
     '''
-    Muestra los datos del jugador que el usuario desee y, ademas, lo guarda en formato csv.
+    Muestra los datos del jugador que el usuario desee y, ademas, 
+    lo guarda en formato csv.
     Parametro: list
     No retorna nada
     '''
-    buscar_jugador_por_indice(lista_jugadores)
+    buscar_jugador_por_indice(
+                            lista_jugadores)
 
 #3    
 def imprimir_nombre_jugador_y_logros(lista_jugadores: list):
@@ -387,24 +435,29 @@ def imprimir_nombre_jugador_y_logros(lista_jugadores: list):
     Parametro: list
     No retorna nada
     '''
-    print(nombre_jugador_logros(lista_jugadores))
+    print(nombre_jugador_logros(
+                            lista_jugadores))
 
 #4
 def imprimir_asc_alfabeticamente_promedio_puntos(lista_jugadores: list):
     '''
-    Imprime de forma alfabetica los nombres de los jugadores y su promedio puntos por partido.
+    Imprime de forma alfabetica los nombres de los jugadores y su promedio 
+    puntos por partido.
     Parametro: list
     No retorna nada
     '''
-    formateo_nombres_ordenados_con_promedio_puntos(lista_jugadores)
+    formateo_ordenados(
+                    lista_jugadores, "promedio_puntos_por_partido")
 #5
 def imprimir_jugador_salon_fama(lista_jugadores: list):
     '''
-    Imprime si el nombre del jugador ingresado se encuentra en el salon de la fama del baloncesto
+    Imprime si el nombre del jugador ingresado se encuentra en el 
+    salon de la fama del baloncesto
     Parametro: list
     No retorna nada
     '''
-    print(jugadores_salon_fama(lista_jugadores))
+    print(jugadores_salon_fama(
+                            lista_jugadores))
 
 #6
 def imprimir_jugador_max_rebotes(lista_jugadores: list):
@@ -413,7 +466,8 @@ def imprimir_jugador_max_rebotes(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "rebotes_totales"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "rebotes_totales"))
 #7
 def imprimir_jugador_max_tiros_campo(lista_jugadores: list):
     '''
@@ -421,7 +475,8 @@ def imprimir_jugador_max_tiros_campo(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "porcentaje_tiros_de_campo"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "porcentaje_tiros_de_campo"))
 
 #8
 def imprimir_jugador_max_asistencias_totales(lista_jugadores: list):
@@ -430,32 +485,39 @@ def imprimir_jugador_max_asistencias_totales(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "asistencias_totales"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "asistencias_totales"))
 #9
 def imprimir_jugadores_promedio_puntos_por_partido(lista_jugadores: list):
     '''
-    Imprime el nombre de jugadores mayores al numero pasado por input(promedio puntos por patido)
+    Imprime el nombre de jugadores mayores al numero pasado por input
+    (promedio puntos por patido)
     Parametros: list
     No retorna nada
     '''
-    print(estadisticas_mayores_a_input(lista_jugadores, "promedio_puntos_por_partido"))
+    print(estadisticas_mayores_a_input(
+                            lista_jugadores, "promedio_puntos_por_partido"))
 
 #10
 def imprimir_jugadores_promedio_rebotes_por_partido(lista_jugadores: list):
     '''
-    Imprime el nombre de jugadores mayores al numero pasado por input (promedio rebotes por partido)
+    Imprime el nombre de jugadores mayores al numero pasado por input 
+    (promedio rebotes por partido)
     Parametros: list
     No retorna nada
     '''
-    print(estadisticas_mayores_a_input(lista_jugadores, "promedio_rebotes_por_partido"))
+    print(estadisticas_mayores_a_input(
+                            lista_jugadores, "promedio_rebotes_por_partido"))
 #11
 def imprimir_jugadores_promedio_asistencias_por_partido(lista_jugadores: list):
     '''
-    Imprime el nombre de jugadores mayores al numero pasado por input (promedio asistencias por partido)
+    Imprime el nombre de jugadores mayores al numero pasado por input 
+    (promedio asistencias por partido)
     Parametros: list
     No retorna nada
     '''
-    print(estadisticas_mayores_a_input(lista_jugadores, "promedio_asistencias_por_partido"))
+    print(estadisticas_mayores_a_input(
+                        lista_jugadores, "promedio_asistencias_por_partido"))
 #12
 def imprimir_jugador_max_robos_totales(lista_jugadores: list):
     '''
@@ -463,7 +525,8 @@ def imprimir_jugador_max_robos_totales(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "robos_totales"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "robos_totales"))
 #13
 def imprimir_jugador_max_bloqueos_totales(lista_jugadores: list):
     '''
@@ -471,23 +534,29 @@ def imprimir_jugador_max_bloqueos_totales(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "bloqueos_totales"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "bloqueos_totales"))
 #14
 def imprimir_jugadores_porcentaje_tiros_libres(lista_jugadores: list):
     '''
-    Imprime el nombre de jugadores mayores al numero pasado por input (porcentaje de tiros libres)
+    Imprime el nombre de jugadores mayores al numero pasado por input 
+    (porcentaje de tiros libres)
     Parametros: list
     No retorna nada
     '''
-    print(estadisticas_mayores_a_input(lista_jugadores, "porcentaje_tiros_libres"))
+    print(estadisticas_mayores_a_input(
+                            lista_jugadores, "porcentaje_tiros_libres"))
 #15
-def imprimir_jugadores_y_excluir_al_menor_promedio_puntos_por_partido(lista_jugadores: list):
+def imprimir_jugadores_y_excluir_al_menor_promedio_puntos_por_partido(
+                                                        lista_jugadores: list):
     '''
-    Imprime el nombre de los jugadores y su estadistica correspondiente, excluyendo al jugador con el menor numero
+    Imprime el nombre de los jugadores y su estadistica correspondiente, 
+    excluyendo al jugador con el menor numero
     Parametros: list
     No retorna nada
     '''
-    print(excluir_jugador_min(lista_jugadores, "promedio_puntos_por_partido"))
+    print(excluir_jugador_min(
+                            lista_jugadores, "promedio_puntos_por_partido"))
 #16
 def imprimir_jugador_max_logros(lista_jugadores: list):
     '''
@@ -496,15 +565,18 @@ def imprimir_jugador_max_logros(lista_jugadores: list):
     No retorna nada
 
     '''
-    print(jugador_mayor_logros(lista_jugadores))
+    print(jugador_mayor_logros(
+                            lista_jugadores))
 #17
 def imprimir_jugadores_porcentaje_tiros_triples(lista_jugadores: list):
     '''
-    Imprime el nombre de jugadores mayores al numero pasado por input (porcentaje de tiros triples)
+    Imprime el nombre de jugadores mayores al numero pasado por input 
+    (porcentaje de tiros triples)
     Parametros: list
     No retorna nada
     '''
-    print(estadisticas_mayores_a_input(lista_jugadores, "porcentaje_tiros_triples"))
+    print(estadisticas_mayores_a_input(
+                            lista_jugadores, "porcentaje_tiros_triples"))
 #18
 def imprimir_jugador_max_temporadas(lista_jugadores: list):
     '''
@@ -512,9 +584,18 @@ def imprimir_jugador_max_temporadas(lista_jugadores: list):
     Parametros: list
     No retorna nada
     '''
-    print(mostrar_jugador_estadisticas_max(lista_jugadores, "temporadas"))
+    print(mostrar_jugador_estadisticas_max(
+                            lista_jugadores, "temporadas"))
 #19
-
+def imprimir_jugadores_ordenados_posicion(lista_jugadores: list):
+    '''
+    Imprime el nombre de jugadores mayores al numero pasado por input 
+    (porcentaje tiros de campo)
+    Parametro: list
+    No retorna nada
+    '''
+    print(estadisticas_mayores_a_input(ordenar_por_posiciones(
+        lista_modificada(lista_jugadores)), "porcentaje_tiros_de_campo"))
 #23
 
 ##########MENU############
@@ -603,59 +684,59 @@ def dream_team_app(lista_jugadores: list):
                     print("--------------------")
                     imprimir_estadisticas_jugador_indice(copia_lista)
                     print("--------------------")
-                case '3':
+                case "3":
                     print("--------------------")
                     imprimir_nombre_jugador_y_logros(copia_lista)
                     print("--------------------")
-                case '4':
+                case "4":
                     print("--------------------")
                     imprimir_asc_alfabeticamente_promedio_puntos(copia_lista)
                     print("--------------------")
-                case '5':
+                case "5":
                     print("--------------------")
                     imprimir_jugador_salon_fama(copia_lista)
                     print("--------------------")
-                case '6':
+                case "6":
                     print("--------------------")
                     imprimir_jugador_max_rebotes(copia_lista)
                     print("--------------------")
-                case '7':
+                case "7":
                     print("--------------------")
                     imprimir_jugador_max_tiros_campo(copia_lista)
                     print("--------------------")
-                case '8':
+                case "8":
                     print("--------------------")
                     imprimir_jugador_max_asistencias_totales(copia_lista)
                     print("--------------------")
-                case '9':
+                case "9":
                     print("--------------------")
                     imprimir_jugadores_promedio_puntos_por_partido(copia_lista)
                     print("--------------------")
-                case '10':
+                case "10":
                     print("--------------------")
                     imprimir_jugadores_promedio_rebotes_por_partido(copia_lista)
                     print("--------------------")
-                case '11':
+                case "11":
                     print("--------------------")
                     imprimir_jugadores_promedio_asistencias_por_partido(copia_lista)
                     print("--------------------")
-                case '12':
+                case "12":
                     print("--------------------")
                     imprimir_jugador_max_robos_totales(copia_lista)
                     print("--------------------")
-                case '13':
+                case "13":
                     print("--------------------")
                     imprimir_jugador_max_bloqueos_totales(copia_lista)
                     print("--------------------")
-                case '14':
+                case "14":
                     print("--------------------")
                     imprimir_jugadores_porcentaje_tiros_libres(copia_lista)
                     print("--------------------")
-                case '15':
+                case "15":
                     print("--------------------")
                     imprimir_jugadores_y_excluir_al_menor_promedio_puntos_por_partido(copia_lista)
                     print("--------------------")
-                case '16':
+                case "16":
                     print("--------------------")
                     imprimir_jugador_max_logros(copia_lista)
                     print("--------------------")
@@ -669,7 +750,7 @@ def dream_team_app(lista_jugadores: list):
                     print("--------------------")
                 case "19":
                     print("--------------------")
-                    print("Sin terminar, proximamente.")
+                    imprimir_jugadores_ordenados_posicion(copia_lista)
                     print("--------------------")
                 case "23":
                     print("--------------------")
