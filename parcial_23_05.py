@@ -15,6 +15,8 @@ def leer_archivo(path_completo: str):
     with open(path_completo, "r") as archivo:
         return list[dict](json.load(archivo)["jugadores"])
 
+dream_team = leer_archivo("primer_parcial\pp_lab1_barboza_matias_gabriel\dt.json")
+
 def validar_numero(numero: str)-> bool:
     '''
     Valida si el dato ingresado es un numero, sea int o float
@@ -147,10 +149,12 @@ def lista_dict_nombres(lista_jugadores: list[dict], clave: str):
     copia_lista = lista_jugadores[:]
     lista_nombres_puntos = []
     for jugadores in copia_lista:
-        for claves in jugadores["estadisticas"].keys():
+        for claves in jugadores["estadisticas"]:
             if claves == clave:
-                lista_nombres_puntos.append({"nombre": jugadores["nombre"],
-                                             clave: jugadores["estadisticas"][clave]})
+                lista_nombres_puntos.append(
+                    {"nombre": jugadores["nombre"],
+                    clave: jugadores["estadisticas"][clave]})
+
     return lista_nombres_puntos
 
 #1
@@ -168,7 +172,7 @@ def buscar_jugador_por_indice(lista_jugadores: list):
     '''
     Hace ingresar un numero por input, el cual es el indice que llama al jugador correspondiente.
     Parametros: list
-    Retorna los datos del jugador llamado.
+    No retorna nada
     '''
     copia_lista = lista_jugadores
     indice_jugador = input(
@@ -190,7 +194,8 @@ def buscar_jugador_por_indice(lista_jugadores: list):
 #3
 def nombre_jugador_logros(lista_jugadores: list):
     '''
-    Busca si el jugador ingresado por input coincide con los que se encuentran en la lista.
+    Busca si el jugador ingresado por input coincide con los que se encuentran en la lista,
+    si es asi, muestra el nombre y sus logros.
     Parametro: list
     Retorna un texto formateado con los datos del jugador
     '''
@@ -211,7 +216,7 @@ def nombre_jugador_logros(lista_jugadores: list):
         return "Error, ingrese correctamente."
 
 #4
-def ordenar_claves_o_numeros(lista_jugadores:list, clave: str):
+def ordenar_claves_o_numeros(lista_jugadores:list, clave: str, auxiliar: bool):
     '''
     Ordena las claves pasadas por parametro
     Parametros: list - str
@@ -223,12 +228,17 @@ def ordenar_claves_o_numeros(lista_jugadores:list, clave: str):
     while bandera_swap:
         bandera_swap = False
         longitud_lista = longitud_lista - 1
-        for indice in range(longitud_lista):
-            if copia_lista[indice][clave] > copia_lista[indice+1][clave]:
-                copia_lista[indice], copia_lista[indice+1] = copia_lista[indice+1], copia_lista[indice]
-                bandera_swap = True
+        if auxiliar == True:
+            for indice in range(longitud_lista):
+                if copia_lista[indice][clave] > copia_lista[indice+1][clave]:
+                    copia_lista[indice], copia_lista[indice+1] = copia_lista[indice+1], copia_lista[indice]
+                    bandera_swap = True
+        else:
+            for indice in range(longitud_lista):
+                if copia_lista[indice][clave] < copia_lista[indice+1][clave]:
+                    copia_lista[indice], copia_lista[indice+1] = copia_lista[indice+1], copia_lista[indice]
+                    bandera_swap = True
     return copia_lista
-
 
 def formateo_ordenados(lista_jugadores: list, clave: str):
     '''
@@ -238,7 +248,7 @@ def formateo_ordenados(lista_jugadores: list, clave: str):
     '''
     copia_lista = lista_jugadores[:]
     lista = lista_dict_nombres(copia_lista, clave)
-    lista = ordenar_claves_o_numeros(lista, "nombre")
+    lista = ordenar_claves_o_numeros(lista, "nombre", True)
     for jugadores in lista:
         for claves, valores in jugadores.items():
             print("{0}: {1}".format(formatear_claves(claves), valores))
@@ -255,7 +265,7 @@ def jugadores_salon_fama(lista_jugadores: list):
     flag = 0
     if evaluar_palabras(nombre_jugador) == True:
         for jugador in copia_lista:
-            if nombre_jugador.capitalize() == jugador["nombre"].capitalize():
+            if nombre_jugador.lower() == jugador["nombre"].lower():
                 for logros in jugador["logros"]:
                     if (logros in "Miembro del Salon de la Fama del Baloncesto"
                         and flag == 0):
@@ -377,18 +387,19 @@ def lista_modificada(lista_jugadores: list) -> list:
         elif jugadores["posicion"] == "Pivot":
             jugadores["posicion"] = 5
         else:
-            return "No funciona"
+            return "Error"
 
     return copia_lista
 
 def ordenar_por_posiciones(lista_jugadores: list):
     '''
-    Ordena y cambia las posiciones de numeros a las posiciones correspondientes
+    Ordena a los jugadores segun los numeros y cambia los numeros por las posiciones 
+    de la anterior funcion.
     Parametro: list
     Retorna la lista ordenada y modificada
     '''
     copia_lista = lista_jugadores[:]
-    lista_ordenada = ordenar_claves_o_numeros(copia_lista, "posicion")
+    lista_ordenada = ordenar_claves_o_numeros(copia_lista, "posicion", True)
     for jugadores in lista_ordenada:
         if jugadores["posicion"] == 1:
             jugadores["posicion"] = "Base"
@@ -400,10 +411,58 @@ def ordenar_por_posiciones(lista_jugadores: list):
             jugadores["posicion"] = "Ala-Pivot"
         elif jugadores["posicion"] == 5:
             jugadores["posicion"] = "Pivot"
-
+        else:
+            return "Error"
     return lista_ordenada
-
 #23
+def ranking_ordenado_dream_team(lista_jugadores: list):
+    '''
+    Ordena del 1, como mejor, al 12, como peor, a los jugadores
+    Parametro: list
+    Retorna una lista con los rankings
+    '''
+    copia_lista = lista_jugadores[:]
+    lista_ordenada_puntos = ordenar_claves_o_numeros(lista_dict_nombres(copia_lista, "puntos_totales"), "puntos_totales", False)
+    lista_ordenada_rebotes = ordenar_claves_o_numeros(lista_dict_nombres(copia_lista, "rebotes_totales"), "rebotes_totales", False)
+    lista_ordenada_asistencias = ordenar_claves_o_numeros(lista_dict_nombres(copia_lista, "asistencias_totales"), "asistencias_totales", False)
+    lista_ordenada_robos = ordenar_claves_o_numeros(lista_dict_nombres(copia_lista, "robos_totales"), "robos_totales", False)
+    
+    lista_ranking_jugadores = []
+    for jugadores in copia_lista:
+        dict_rankings = {}
+        for indice in range(len(copia_lista)):
+            if jugadores["nombre"] == lista_ordenada_puntos[indice]["nombre"]:
+                dict_rankings["Nombre"] = lista_ordenada_puntos[indice]["nombre"]
+                dict_rankings["Puntos"] = indice + 1
+        for indice in range(len(copia_lista)):
+            if jugadores["nombre"] == lista_ordenada_rebotes[indice]["nombre"]:
+                dict_rankings["Rebotes"] = indice + 1
+        for indice in range(len(copia_lista)):
+            if jugadores["nombre"] == lista_ordenada_asistencias[indice]["nombre"]:
+                dict_rankings["Asistencias"] = indice + 1
+        for indice in range(len(copia_lista)):
+            if jugadores["nombre"] == lista_ordenada_robos[indice]["nombre"]:
+                dict_rankings["Robos"] = indice + 1
+        lista_ranking_jugadores.append(dict_rankings)
+    
+    return lista_ranking_jugadores
+
+def formatear_y_guardar_ranking(lista_jugadores: list[dict]):
+    '''
+    La lista con diccionarios es formateado a string y guardado en un formato csv
+    Parametro: list[dict]
+    No retorna nada
+    '''
+    copia_lista = lista_jugadores[:]
+    texto_formateado = []
+    for jugadores in copia_lista:
+        texto_formateado.append("Jugador, Puntos, Rebotes, Asistencias, Robos,")
+        texto_formateado.append("{0}, {1}, {2}, {3}, {4},".format(
+          jugadores["Nombre"], jugadores["Puntos"], jugadores["Rebotes"],
+          jugadores["Asistencias"], jugadores["Robos"]))
+    texto_formateado = "\n".join(texto_formateado)
+    print(texto_formateado)
+    guardar_archivo_csv("ranking_jugadores.csv", texto_formateado)
 
 
 ################################ FIN AUXILIARES #################################
@@ -598,7 +657,14 @@ def imprimir_jugadores_ordenados_posicion(lista_jugadores: list):
     print(estadisticas_mayores_a_input(ordenar_por_posiciones(
         lista_modificada(lista_jugadores)), "porcentaje_tiros_de_campo"))
 #23
-
+def imprimir_ranking_de_jugadores(lista_jugadores: list):
+    '''
+    Imprime el nombre de los jugadores con sus lugares en el ranking de puntos, rebotes, 
+    asistencias y robos.
+    Paramentro: list
+    No retorna nada
+    '''
+    formatear_y_guardar_ranking(ranking_ordenado_dream_team(lista_jugadores))
 ##########MENU############
 def menu_opciones():
     '''
@@ -755,13 +821,13 @@ def dream_team_app(lista_jugadores: list):
                     print("--------------------")
                 case "23":
                     print("--------------------")
-                    print("Sin terminar, proximamente.")
+                    imprimir_ranking_de_jugadores(copia_lista)
                     print("--------------------")
                 case "0":
                     break
                 case _:
                     print("--------------------")
-                    print("Ingrese la opcion que desee del menú.")
+                    print("Ingrese la opcion que aparece en el menú.")
                     print("--------------------")
     else:
         print("No existe la lista")
