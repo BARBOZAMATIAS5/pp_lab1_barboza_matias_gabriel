@@ -20,7 +20,7 @@ from funciones_parcial import (formateo_dream_team_jugadores,
 def imprimir_jugadores(lista_jugadores: list[dict]):
     '''
     Imprime de la lista todos los jugadores: nombre y posicion
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(formateo_dream_team_jugadores(
@@ -31,7 +31,7 @@ def imprimir_estadisticas_jugador_indice(lista_jugadores: list[dict]):
     '''
     Muestra los datos del jugador que el usuario desee y, ademas, 
     lo guarda en formato csv.
-    Parametro: list
+    Parametro: list[dict]
     No retorna nada
     '''
     buscar_jugador_por_indice(
@@ -41,7 +41,7 @@ def imprimir_estadisticas_jugador_indice(lista_jugadores: list[dict]):
 def imprimir_nombre_jugador_y_logros(lista_jugadores: list[dict]):
     '''
     Imprime el nombre del jugador y sus logros.
-    Parametro: list
+    Parametro: list[dict]
     No retorna nada
     '''
     print(nombre_jugador_logros(
@@ -52,7 +52,7 @@ def imprimir_asc_alfabeticamente_promedio_puntos(lista_jugadores: list[dict]):
     '''
     Imprime de forma alfabetica los nombres de los jugadores y su promedio 
     puntos por partido.
-    Parametro: list
+    Parametro: list[dict]
     No retorna nada
     '''
     formateo_ordenados(
@@ -62,7 +62,7 @@ def imprimir_jugador_salon_fama(lista_jugadores: list[dict]):
     '''
     Imprime si el nombre del jugador ingresado se encuentra en el 
     salon de la fama del baloncesto
-    Parametro: list
+    Parametro: list[dict]
     No retorna nada
     '''
     print(jugadores_salon_fama(
@@ -72,7 +72,7 @@ def imprimir_jugador_salon_fama(lista_jugadores: list[dict]):
 def imprimir_jugador_max_rebotes(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas rebotes totales.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -81,7 +81,7 @@ def imprimir_jugador_max_rebotes(lista_jugadores: list[dict]):
 def imprimir_jugador_max_tiros_campo(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas porcentaje de tiros de campo.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -91,7 +91,7 @@ def imprimir_jugador_max_tiros_campo(lista_jugadores: list[dict]):
 def imprimir_jugador_max_asistencias_totales(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas asistencias totales.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -101,7 +101,7 @@ def imprimir_jugadores_promedio_puntos_por_partido(lista_jugadores: list[dict]):
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input
     (promedio puntos por patido)
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(
@@ -112,7 +112,7 @@ def imprimir_jugadores_promedio_rebotes_por_partido(lista_jugadores: list[dict])
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input 
     (promedio rebotes por partido)
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(
@@ -123,7 +123,7 @@ def imprimir_jugadores_promedio_asistencias_por_partido(lista_jugadores: list[di
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input 
     (promedio asistencias por partido)
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(
@@ -133,7 +133,7 @@ def imprimir_jugadores_promedio_asistencias_por_partido(lista_jugadores: list[di
 def imprimir_jugador_max_robos_totales(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas robos totales.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -143,7 +143,7 @@ def imprimir_jugador_max_robos_totales(lista_jugadores: list[dict]):
 def imprimir_jugador_max_bloqueos_totales(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas bloqueos totales.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -154,7 +154,7 @@ def imprimir_jugadores_porcentaje_tiros_libres(lista_jugadores: list[dict]):
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input 
     (porcentaje de tiros libres)
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(
@@ -166,7 +166,7 @@ def imprimir_jugadores_y_excluir_al_menor_promedio_puntos_por_partido(
     '''
     Imprime el nombre de los jugadores y su estadistica correspondiente, 
     excluyendo al jugador con el menor numero
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(excluir_jugador_min(
@@ -176,7 +176,7 @@ def imprimir_jugadores_y_excluir_al_menor_promedio_puntos_por_partido(
 def imprimir_jugador_max_logros(lista_jugadores: list[dict]):
     '''
     Imprime el nombre y logros del jugador con mas logros.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
 
     '''
@@ -188,7 +188,7 @@ def imprimir_jugadores_porcentaje_tiros_triples(lista_jugadores: list[dict]):
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input 
     (porcentaje de tiros triples)
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(
@@ -198,7 +198,7 @@ def imprimir_jugadores_porcentaje_tiros_triples(lista_jugadores: list[dict]):
 def imprimir_jugador_max_temporadas(lista_jugadores: list[dict]):
     '''
     Imprime los datos del jugador con mas bloqueos temporadas.
-    Parametros: list
+    Parametros: list[dict]
     No retorna nada
     '''
     print(mostrar_jugador_estadisticas_max(
@@ -209,7 +209,7 @@ def imprimir_jugadores_ordenados_posicion(lista_jugadores: list[dict]):
     '''
     Imprime el nombre de jugadores mayores al numero pasado por input 
     (porcentaje tiros de campo)
-    Parametro: list
+    Parametro: list[dict]
     No retorna nada
     '''
     print(estadisticas_mayores_a_input(ordenar_por_posiciones(
@@ -220,7 +220,7 @@ def imprimir_ranking_de_jugadores(lista_jugadores: list[dict]):
     '''
     Imprime el nombre de los jugadores con sus lugares en el ranking de puntos, rebotes, 
     asistencias y robos.
-    Paramentro: list
+    Paramentro: list[dict]
     No retorna nada
     '''
     formatear_y_guardar_ranking(lista_jugadores)
@@ -332,10 +332,8 @@ def menu_principal_dream_team():
     '''
     menu_opciones()
     opcion = input("Ingrese una opción: ")
-    if validar_numero(opcion) == True:
-        return opcion
-    else:
-        return -1
+
+    return opcion
 
 
 def dream_team_app(lista_jugadores: list):

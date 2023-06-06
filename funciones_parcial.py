@@ -206,9 +206,9 @@ def nombre_jugador_logros(lista_jugadores: list[dict])-> str:
     copia_lista = lista_jugadores[:]
     nombre_jugador = input("Ingrese el nombre del jugador: ")
     flag = 0
-    while evaluar_palabras(nombre_jugador) == True:
+    if evaluar_palabras(nombre_jugador) == True:
         for jugador in copia_lista:
-            if nombre_jugador == jugador["nombre"] and flag == 0:
+            if nombre_jugador.lower() == jugador["nombre"].lower() and flag == 0:
                 jugador_elegido = ("Nombre jugador: {0}\nLogros: \n{1}".
                                    format(jugador["nombre"], "\n".join(jugador["logros"])))
                 flag = 1
@@ -351,7 +351,8 @@ def excluir_jugador_min(lista_jugadores: list[dict], clave: str) -> str:
     for jugador in copia_lista:
         if jugador != jugador_min:
             texto_formateado.append("Nombre: {0}\n{1}: {2}"
-                                    .format(jugador["nombre"], formatear_claves(clave),
+                                    .format(jugador["nombre"], 
+                                            formatear_claves(clave),
                                             jugador["estadisticas"][clave]))
 
     texto_formateado.append("\nJugador excluido {0}".format(
@@ -548,7 +549,6 @@ def jugador_nombre_logro_all_star(lista_jugadores: list[dict]):
                 diccionario_all_star["nombre"] = jugador["nombre"]
                 diccionario_all_star["logro"] = logro
         lista_all_star.append(diccionario_all_star)
-    print(lista_all_star)
     lista_nueva = [diccionario for diccionario in lista_all_star if diccionario]
     #crea una lista donde diccionario es la variable auxiliar, hace un for en 
     #lista_all_star y si diccionario tiene algun elemento, lo agrega a la lista.
@@ -566,8 +566,8 @@ def ordenar_all_star_descendente(lista_jugadores: list[dict])-> list[dict]:
     while bandera_swap:
         bandera_swap = False
         for i in range(len(lista_all_star) - 1):
-            if (int(lista_all_star[i]["logro"].split()[0]) <
-                int(lista_all_star[i+1]["logro"].split()[0])):
+            if (int(lista_all_star[i]["logro"].split(" ")[0]) <
+                int(lista_all_star[i+1]["logro"].split(" ")[0])):
                 lista_all_star[i], lista_all_star[i+1] = lista_all_star[i+1], lista_all_star[i]
                 bandera_swap = True
     
@@ -647,12 +647,12 @@ def jugador_con_mejor_estadistica(lista_jugadores: list[dict]) -> dict:
     copia_lista = lista_jugadores[:]
     lista_promedio_ranking = lista_jugadores_promedio_ranking(copia_lista)
     jugador_aux = None
-    for jugadores in lista_promedio_ranking:
+    for jugador in lista_promedio_ranking:
         if not jugador_aux:
-            jugador_aux = jugadores
+            jugador_aux = jugador
         else:
-            if jugador_aux["promedio"] > jugadores["promedio"]:
-                jugador_aux = jugadores
+            if jugador_aux["promedio"] > jugador["promedio"]:
+                jugador_aux = jugador
     
-    return ("El jugador {0} tiene las mejores estadisticas de todos".
+    return ("El jugador {0} tiene las mejores estadisticas de todos,\nademas de mejores posiciones en el ranking.".
             format(jugador_aux["nombre"]))
