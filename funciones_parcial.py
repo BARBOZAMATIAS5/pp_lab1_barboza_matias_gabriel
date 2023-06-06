@@ -112,17 +112,6 @@ def dividir(dividendo: float, divisor: float) -> float:
     elif divisor == 0:
         return 0
 
-def calcular_promedio(lista_jugadores: list, clave: str)-> float | int:
-    '''
-    Calcula y muestra el promedio de lo pasado por parametro
-    Parametro: list - str
-    Retorna el resultado del promedio
-    '''
-    copia_lista = lista_jugadores[:]
-    promedio = dividir(
-        sumar_estadisticas(copia_lista, clave), len(copia_lista))
-    return promedio
-
 def calcular_jugador_max_min_estadisticas(lista_jugadores: list[dict], clave: str, auxiliar: str)-> dict:
     '''
     Muestra el jugador maximo o minimo y lo almacena 
@@ -351,7 +340,8 @@ def excluir_jugador_min(lista_jugadores: list[dict], clave: str) -> str:
     No retorna nada
     '''
     copia_lista = lista_jugadores[:]
-    jugador_min = calcular_jugador_max_min_estadisticas(copia_lista, clave, "min")
+    jugador_min = calcular_jugador_max_min_estadisticas(
+                                copia_lista, clave, "min")
     resultado_excluir_min = (sumar_estadisticas(copia_lista, clave)
                              - jugador_min["estadisticas"][clave])
     promedio = resultado_excluir_min / (len(copia_lista) - 1)
